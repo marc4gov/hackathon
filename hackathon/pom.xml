@@ -13,6 +13,7 @@
 
   <properties>
     <camunda.version>7.4.0</camunda.version>
+    <version.connect>1.0.3</version.connect>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -35,6 +36,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+    <dependency>
+      <groupId>org.camunda.connect</groupId>
+      <artifactId>camunda-connect-bom</artifactId>
+      <scope>import</scope>
+      <type>pom</type>
+      <version>${version.connect}</version>
+    </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -83,7 +91,17 @@
       <artifactId>camunda-engine-plugin-connect</artifactId>
       <scope>test</scope>
     </dependency>
+    
+  <dependency>
+    <groupId>org.camunda.connect</groupId>
+    <artifactId>camunda-connect-core</artifactId>
+  </dependency>
 
+  <dependency>
+    <groupId>org.camunda.connect</groupId>
+    <artifactId>camunda-connect-connectors-all</artifactId>
+  </dependency>
+  
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
@@ -156,6 +174,12 @@
 	<groupId>com.tinkerpop.blueprints</groupId>
 	<artifactId>blueprints-orient-graph</artifactId>
 	<version>2.4.0</version>
+</dependency>
+
+<dependency>
+    <groupId>io.getstream.client</groupId>
+    <artifactId>stream-repo-okhttp</artifactId>
+    <version>0.1-RC2</version>
 </dependency>
 
   </dependencies>
