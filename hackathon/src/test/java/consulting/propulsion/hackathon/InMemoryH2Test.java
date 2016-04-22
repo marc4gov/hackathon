@@ -12,6 +12,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.orientechnologies.orient.core.command.OCommandRequest;
+import com.orientechnologies.orient.core.sql.OCommandSQL;
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
@@ -127,31 +130,33 @@ public class InMemoryH2Test {
 	  // To generate the coverage report for a single tests add this line as the last line of your test method:
 	  //ProcessTestCoverage.calculate(processInstance, rule.getProcessEngine());
 	  
-	  OrientGraphFactory factory = new OrientGraphFactory("remote:192.168.99.100:32772/testDB", "admin", "admin").setupPool(1,10);
+	  OrientGraphFactory factory = new OrientGraphFactory("remote:130.211.107.28:2424/testDB", "admin", "propulsionaanpakfraude").setupPool(1,10);
 
 	  // EVERY TIME YOU NEED A GRAPH INSTANCE
 	  OrientGraph graph = factory.getTx();
-	  try {
-		  //Create vertex
-		 
-		  //OrientVertexType customer = graph.getVertexType("Customer");
-		  //OrientEdgeType friendsEdge = graph.getEdgeType("Friend");
-		  Vertex v1 = graph.addVertex("class:Customer");
-		  v1.setProperty("name", "Blabla4");
 
-		  Vertex v2 = graph.addVertex("class:Customer");;
-		  v2.setProperty("name", "Duh4");
+		  try {
+			  for (Vertex v : graph.getVertices("naam", "2222AA22")) {
+				  	for (Edge e : v.getEdges(Direction.BOTH, null)){
+				  		System.out.println("- Result: " + e.getId() + e.getLabel());
+				  	}		
+				}
+			  
+		} finally {
+			   graph.shutdown();
+		}
+  
+		  
+		  //Vertex v1 = graph.addVertex("class:Adres");
+		  //v1.setProperty("naam", "2222AA22");
+
+		  //Vertex v2 = graph.addVertex("class:Persoon");;
+		  //v2.setProperty("naam", "2234235");
 		  // Create an Edge from v1 to v2
 		  //Edge e = graph.addEdge(null, v1, v2, "Friend");
-		  Edge e = v1.addEdge("Friend", v2);
-		
-		  Iterable<Vertex> allVertices = graph.getVertices();
-		  for (Vertex v : allVertices) {
-			    System.out.println(v.toString());
-		  }
-	  } finally {
-	     graph.shutdown();
-	  }
+		  //Edge e = v1.addEdge("Ingeschreven", v2);
+
+	  
   }
   
 

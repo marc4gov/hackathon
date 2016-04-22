@@ -7,19 +7,10 @@
           <camunda:formField id="kanaal" label="Kanaal" type="enum" defaultValue="afnemer">
             <camunda:value id="afnemer" name="Afnemer BRP" />
             <camunda:value id="website" name="Website" />
-            <camunda:value id="tmv" name="TMV" />
             <camunda:value id="anders" name="Anders" />
           </camunda:formField>
-          <camunda:formField id="postcode" label="Postcode" type="string" defaultValue="1111AA">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="huisnummer" label="Huisnummer" type="string" defaultValue="11">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
+          <camunda:formField id="postcode" label="Postcode" type="string" defaultValue="1111AA" />
+          <camunda:formField id="huisnummer" label="Huisnummer" type="string" defaultValue="11" />
           <camunda:formField id="bsn" label="BSN" type="string" defaultValue="123456789" />
         </camunda:formData>
       </bpmn2:extensionElements>
@@ -37,21 +28,21 @@
       <bpmn2:incoming>SequenceFlow_00vqr6y</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_1tizita</bpmn2:outgoing>
       <bpmn2:outgoing>SequenceFlow_0ximnr5</bpmn2:outgoing>
-      <bpmn2:outgoing>SequenceFlow_1bstxfy</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
-    <bpmn2:sequenceFlow id="SequenceFlow_1tizita" sourceRef="ExclusiveGateway_12957l6" targetRef="UserTask_0u3dtg8" />
-    <bpmn2:sequenceFlow id="SequenceFlow_0ximnr5" sourceRef="ExclusiveGateway_12957l6" targetRef="UserTask_1nvjbou" />
+    <bpmn2:sequenceFlow id="SequenceFlow_1tizita" sourceRef="ExclusiveGateway_12957l6" targetRef="UserTask_0u3dtg8">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[${kanaal == 'website'}]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="SequenceFlow_0ximnr5" sourceRef="ExclusiveGateway_12957l6" targetRef="UserTask_1nvjbou">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[${kanaal == 'afnemer'}]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="SequenceFlow_0o4t4ex" sourceRef="UserTask_0u3dtg8" targetRef="ExclusiveGateway_0svngej" />
     <bpmn2:exclusiveGateway id="ExclusiveGateway_0svngej">
       <bpmn2:incoming>SequenceFlow_0o4t4ex</bpmn2:incoming>
       <bpmn2:incoming>SequenceFlow_1eg3vzd</bpmn2:incoming>
-      <bpmn2:incoming>SequenceFlow_1efxcsk</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_12rkugf</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
     <bpmn2:sequenceFlow id="SequenceFlow_1eg3vzd" sourceRef="UserTask_1nvjbou" targetRef="ExclusiveGateway_0svngej" />
-    <bpmn2:sequenceFlow id="SequenceFlow_1bstxfy" sourceRef="ExclusiveGateway_12957l6" targetRef="UserTask_1auv033" />
-    <bpmn2:sequenceFlow id="SequenceFlow_1efxcsk" sourceRef="UserTask_1auv033" targetRef="ExclusiveGateway_0svngej" />
-    <bpmn2:userTask id="UserTask_1nvjbou" name="TMV/Melding Afnemer BRP">
+    <bpmn2:userTask id="UserTask_1nvjbou" name="TMV/Melding Afnemer BRP" camunda:assignee="demo">
       <bpmn2:extensionElements>
         <camunda:formData>
           <camunda:formField id="betreft" label="Betreft" type="enum" defaultValue="uitkering">
@@ -60,9 +51,8 @@
             <camunda:value id="kinderbijslag" name="Kinderbijslag" />
             <camunda:value id="kindbudget" name="Kindgebonden budget" />
             <camunda:value id="heffingskorting" name="Heffingskortingen" />
-            <camunda:value id="bijzbijstand" name="Bijzondere bijstand" />
+            <camunda:value id="bijzonderebijstand" name="Bijzondere bijstand" />
             <camunda:value id="overtreding" name="Overtreding" />
-            <camunda:value id="administratie" name="Administratie" />
           </camunda:formField>
           <camunda:formField id="afnemertype" label="Afnemer" type="enum" defaultValue="socialedienst">
             <camunda:value id="socialedienst" name="Sociale Dienst" />
@@ -76,7 +66,7 @@
       <bpmn2:incoming>SequenceFlow_0ximnr5</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_1eg3vzd</bpmn2:outgoing>
     </bpmn2:userTask>
-    <bpmn2:userTask id="UserTask_0u3dtg8" name="Melding Website">
+    <bpmn2:userTask id="UserTask_0u3dtg8" name="Melding Website" camunda:assignee="demo">
       <bpmn2:extensionElements>
         <camunda:formData>
           <camunda:formField id="meldingcategorie" label="Categorie" type="enum" defaultValue="overlast">
@@ -94,24 +84,10 @@
             <camunda:value id="burger" name="Burger" />
             <camunda:value id="bedrijf" name="Bedrijf" />
           </camunda:formField>
-          <camunda:formField id="meldingsubcategorie" label="Subcategorie" type="string" defaultValue="onrechtmatige bewoning" />
         </camunda:formData>
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_1tizita</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_0o4t4ex</bpmn2:outgoing>
-    </bpmn2:userTask>
-    <bpmn2:userTask id="UserTask_1auv033" name="Melding Overig">
-      <bpmn2:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="afzenderoverig" label="Afzender" type="enum" defaultValue="burgeroverig">
-            <camunda:value id="burgeroverig" name="Burger" />
-            <camunda:value id="bedrijfoverig" name="Bedrijf" />
-          </camunda:formField>
-          <camunda:formField id="opmerking" label="Melding" type="string" defaultValue="buurman doet vervelend" />
-        </camunda:formData>
-      </bpmn2:extensionElements>
-      <bpmn2:incoming>SequenceFlow_1bstxfy</bpmn2:incoming>
-      <bpmn2:outgoing>SequenceFlow_1efxcsk</bpmn2:outgoing>
     </bpmn2:userTask>
     <bpmn2:sequenceFlow id="SequenceFlow_00vqr6y" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_12957l6" />
     <bpmn2:sequenceFlow id="SequenceFlow_12rkugf" sourceRef="ExclusiveGateway_0svngej" targetRef="ServiceTask_1" />
@@ -182,30 +158,11 @@
           <dc:Bounds x="586.5" y="60" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1bstxfy_di" bpmnElement="SequenceFlow_1bstxfy">
-        <di:waypoint xsi:type="dc:Point" x="391" y="213" />
-        <di:waypoint xsi:type="dc:Point" x="391" y="308" />
-        <di:waypoint xsi:type="dc:Point" x="490" y="308" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="346" y="265.5" width="90" height="20" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1efxcsk_di" bpmnElement="SequenceFlow_1efxcsk">
-        <di:waypoint xsi:type="dc:Point" x="590" y="308" />
-        <di:waypoint xsi:type="dc:Point" x="673" y="308" />
-        <di:waypoint xsi:type="dc:Point" x="673" y="213" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="586.5" y="328" width="90" height="20" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_1nvjbou_di" bpmnElement="UserTask_1nvjbou">
         <dc:Bounds x="489.78336980306347" y="30.374179431072207" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_0u3dtg8_di" bpmnElement="UserTask_0u3dtg8">
         <dc:Bounds x="490" y="148" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_1auv033_di" bpmnElement="UserTask_1auv033">
-        <dc:Bounds x="490" y="268.3741794310722" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_00vqr6y_di" bpmnElement="SequenceFlow_00vqr6y">
         <di:waypoint xsi:type="dc:Point" x="292" y="188" />
