@@ -41,7 +41,7 @@ public class OrientDBDelegate implements JavaDelegate {
 
 		  Vertex v2 = graph.addVertex(vertexclass);
 		  v2.setProperty("naam", (String) map.get("naam"));
-		  v2.setProperty("afzender", (String) map.get("afzender"));
+		  v2.setProperty("afzender", map.get("afzender"));
 		  
 		  // Create an Edge from v1 to v2
 		  //Edge e = graph.addEdge(null, v1, v2, "Friend");
@@ -53,7 +53,7 @@ public class OrientDBDelegate implements JavaDelegate {
 		  if (vertexclass2 != null) {
 			  Vertex v3 = graph.addVertex(vertexclass2);
 			  if (vertexclass2.equals("class:Persoon")) {
-				  v3.setProperty("naam", (String) map.get("afzender"));
+				  v3.setProperty("naam", map.get("afzender"));
 				  Edge e1 = graph.addEdge(null, v2, v3, (String) map.get("link"));
 				  e1.setProperty("datetime", new Date());
 				  
@@ -62,10 +62,10 @@ public class OrientDBDelegate implements JavaDelegate {
 						  + execution.getVariable("huisnummerNieuw").toString();
 				  v3.setProperty("naam", adresNiew);
 				  
-				  Vertex v4 = graph.getVertices("naam", (String) map.get("afzender")).iterator().next();
+				  Vertex v4 = graph.getVertices("naam", map.get("afzender")).iterator().next();
 				  if (v4 == null) {
 					  v4 = graph.addVertex("class:Persoon");
-					  v4.setProperty("naam", (String) map.get("afzender"));			  
+					  v4.setProperty("naam", map.get("afzender"));			  
 				  }
 				  Edge e2 = graph.addEdge(null, v3, v4, (String) map.get("link"));
 				  e2.setProperty("datetime", new Date());
@@ -104,19 +104,16 @@ public class OrientDBDelegate implements JavaDelegate {
 		result.put("afzender", afzender);
 	} else if (kanaal.equals("loket")) {
 		String intentie = (String) variableMap.get("intentie");
-		switch(intentie){
-			case "inschrijving": result.put("link", "Ingeschreven");
-			case "uitschrijving": {
+		if (intentie.equals("inschrijving")){
+			result.put("link", "Ingeschreven");
+		} else if (intentie.equals("uitschrijving")) {
 				result.put("link", "Uitgeschreven");
-			}
-			case "geboorte": { 
+		} else if (intentie.equals("geboorte")) {
 				result.put("link", "Geboorte");
 				result.put("klasse2", "class:Persoon");
-			}
-			default: {
+		} else {
 				result.put("link", "Ingeschreven");
 				result.put("klasse2", "class:Adres");
-			}
 		}
 		result.put("afzender", variableMap.get("bsn").hashCode());
 		result.put("klasse", "class:Melding");

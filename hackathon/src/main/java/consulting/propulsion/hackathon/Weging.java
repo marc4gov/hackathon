@@ -60,7 +60,7 @@ public class Weging implements JavaDelegate {
 		try {
 			  for (Vertex v : graph.getVertices("naam", adres)) {
 				for (Edge e : v.getEdges(Direction.BOTH, null)){
-					System.out.println("- Result: " + e.getId() + e.getLabel());
+					//System.out.println("- Result: " + e.getId() + e.getLabel());
 					aantal++;
 				}		
 			}

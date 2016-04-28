@@ -1,33 +1,21 @@
-<strong>Here you would put the actual form to work on the task</strong>
+<strong>
+Hier bepalen we het fraude risico aan de hand van een weging
+Hoe hoger de score, des te meer reden voor een onderzoek
+</strong>
 
 <p>
-  You can use this form through Camunda Tasklist
-  by setting the formKey of a BPMN User Task to:
-  <code>embedded:app:forms/task-form.html</code>
+Score
 </p>
 
 <form class="form-horizontal">
   <div class="control-group">
-    <label class="control-label">Name</label>
+    <label class="control-label">Score</label>
     <div class="controls">
       <input type="text" 
-             cam-variable-name="name"
+             cam-variable-name="score"
              readonly="true" 
              class="form-control" />      
     </div>
   </div>
-  <div class="control-group">
-    <label class="control-label">Approve?</label>
-    <div class="controls">
-      <input type="checkbox"
-             cam-variable-name="approved"
-             cam-variable-type="Boolean"
-             name="approved"
-             class="form-control" />
-    </div>
-  </div>
 
-  <script cam-script type="text/form-script">
-  // custom JavaScript goes here
-  </script>
 </form>

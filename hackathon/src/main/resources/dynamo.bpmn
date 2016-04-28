@@ -3,7 +3,20 @@
   <bpmn:process id="DynAMo" name="DynAMo" isExecutable="true">
     <bpmn:startEvent id="StartEventProcessStarted" name="Start DynAMo">
       <bpmn:extensionElements>
-        <camunda:formData />
+        <camunda:formData>
+          <camunda:formField id="intentie" label="Intentie" type="enum" defaultValue="verhuizing">
+            <camunda:value id="inschrijving" name="Inschrijving" />
+            <camunda:value id="uitschrijving" name="Uitschrijving VOW" />
+            <camunda:value id="geboorte" name="Aangifte geboorte" />
+            <camunda:value id="verhuizing" name="Verhuizing" />
+          </camunda:formField>
+          <camunda:formField id="bsn" label="BSN" type="string" defaultValue="123456789" />
+          <camunda:formField id="postcode" label="Postcode" type="string" defaultValue="1111AA" />
+          <camunda:formField id="huisnummer" label="Huisnummer" type="string" defaultValue="11" />
+          <camunda:formField id="postcodeNieuw" label="Postcode Nieuw" type="string" defaultValue="1313AA" />
+          <camunda:formField id="huisnummerNieuw" label="Huisnummer Nieuw" type="string" defaultValue="13" />
+        </camunda:formData>
+        <camunda:executionListener expression="${execution.setVariable(&#34;kanaal&#34;, &#34;loket&#34;)}" event="start" />
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow1</bpmn:outgoing>
     </bpmn:startEvent>
@@ -14,22 +27,6 @@
     <bpmn:sequenceFlow id="SequenceFlow1" sourceRef="StartEventProcessStarted" targetRef="UserTask_1tgck2m" />
     <bpmn:sequenceFlow id="SequenceFlow_0ahcxw2" sourceRef="UserTask_1tgck2m" targetRef="ExclusiveGateway_0oc3ayh" />
     <bpmn:userTask id="UserTask_1tgck2m" name="Intake loket" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="bsn" label="BSN" type="string" defaultValue="123456789" />
-          <camunda:formField id="intentie" label="Intentie" type="enum" defaultValue="verhuizing">
-            <camunda:value id="inschrijving" name="Inschrijving" />
-            <camunda:value id="uitschrijving" name="Uitschrijving VOW" />
-            <camunda:value id="geboorte" name="Aangifte geboorte" />
-            <camunda:value id="verhuizing" name="Verhuizing" />
-          </camunda:formField>
-          <camunda:formField id="postcode" label="Postcode" type="string" defaultValue="1300AA" />
-          <camunda:formField id="huisnummer" label="Huisnummer" type="string" defaultValue="13" />
-          <camunda:formField id="postcodeNieuw" label="Postcode Nieuw (verhuizing)" type="string" defaultValue="1313BB" />
-          <camunda:formField id="huisnummerNieuw" label="Huisnummer Nieuw (verhuizing)" type="string" defaultValue="13" />
-        </camunda:formData>
-        <camunda:executionListener expression="$(execution.setVariable(&#34;kanaal&#34;, &#34;loket&#34;)}" event="end" />
-      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow1</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ahcxw2</bpmn:outgoing>
     </bpmn:userTask>
@@ -101,7 +98,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_072z1jm" sourceRef="ServiceTask_1lau31c" targetRef="EndEventProcessEnded" />
     <bpmn:sequenceFlow id="SequenceFlow_0f96ymi" sourceRef="ServiceTask_1splfzk" targetRef="UserTask_0agwa7w" />
     <bpmn:serviceTask id="ServiceTask_1splfzk" name="Contstrueer netwerk rond adres" camunda:class="consulting.propulsion.hackathon.LoggerDelegate">
-      <bpmn:incoming>SequenceFlow_1xxf6xe</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1yvi8db</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0f96ymi</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0nnqpot" sourceRef="UserTask_0agwa7w" targetRef="EndEventProcessEnded" />
@@ -126,14 +123,19 @@
     </bpmn:serviceTask>
     <bpmn:serviceTask id="ServiceTask_02kr2bh" name="Weging van melding en situatie" camunda:class="consulting.propulsion.hackathon.Weging">
       <bpmn:incoming>SequenceFlow_1ududh9</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1xxf6xe</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_00q0kal</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1xxf6xe" sourceRef="ServiceTask_02kr2bh" targetRef="ServiceTask_1splfzk" />
     <bpmn:sequenceFlow id="SequenceFlow_1ocoekk" sourceRef="ServiceTask_0yw62ue" targetRef="ParallelGateway_0gej0ov" />
     <bpmn:serviceTask id="ServiceTask_0yw62ue" name="Breng relatie op adres aan" camunda:class="consulting.propulsion.hackathon.OrientDBDelegate">
       <bpmn:incoming>SequenceFlow_0sct1se</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ocoekk</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_00q0kal" sourceRef="ServiceTask_02kr2bh" targetRef="UserTask_1ugsgs1" />
+    <bpmn:sequenceFlow id="SequenceFlow_1yvi8db" sourceRef="UserTask_1ugsgs1" targetRef="ServiceTask_1splfzk" />
+    <bpmn:userTask id="UserTask_1ugsgs1" name="Bepaal fraude risico" camunda:formKey="embedded:app:forms/task-form.html" camunda:assignee="demo">
+      <bpmn:incoming>SequenceFlow_00q0kal</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1yvi8db</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmn:message id="Message_11egaa7" name="instantiationMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -273,7 +275,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1ududh9_di" bpmnElement="SequenceFlow_1ududh9">
         <di:waypoint xsi:type="dc:Point" x="692" y="120" />
-        <di:waypoint xsi:type="dc:Point" x="777" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="731" y="120" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="757.5" y="110" width="90" height="20" />
         </bpmndi:BPMNLabel>
@@ -348,15 +350,8 @@
         <dc:Bounds x="505" y="188" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_02kr2bh_di" bpmnElement="ServiceTask_02kr2bh">
-        <dc:Bounds x="777" y="80" width="100" height="80" />
+        <dc:Bounds x="731" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_1xxf6xe_di" bpmnElement="SequenceFlow_1xxf6xe">
-        <di:waypoint xsi:type="dc:Point" x="877" y="120" />
-        <di:waypoint xsi:type="dc:Point" x="1044" y="120" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="915.5" y="110" width="90" height="20" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1ocoekk_di" bpmnElement="SequenceFlow_1ocoekk">
         <di:waypoint xsi:type="dc:Point" x="280" y="120" />
         <di:waypoint xsi:type="dc:Point" x="398" y="120" />
@@ -366,6 +361,23 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0yw62ue_di" bpmnElement="ServiceTask_0yw62ue">
         <dc:Bounds x="180.32417582417588" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_00q0kal_di" bpmnElement="SequenceFlow_00q0kal">
+        <di:waypoint xsi:type="dc:Point" x="831" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="887" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="892.5" y="110" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yvi8db_di" bpmnElement="SequenceFlow_1yvi8db">
+        <di:waypoint xsi:type="dc:Point" x="987" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="1044" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="970.5" y="110" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1ugsgs1_di" bpmnElement="UserTask_1ugsgs1">
+        <dc:Bounds x="886.9677419354839" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

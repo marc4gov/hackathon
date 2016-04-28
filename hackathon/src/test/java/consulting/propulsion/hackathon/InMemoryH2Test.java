@@ -129,7 +129,7 @@ public class InMemoryH2Test {
 	  
 	  // To generate the coverage report for a single tests add this line as the last line of your test method:
 	  //ProcessTestCoverage.calculate(processInstance, rule.getProcessEngine());
-	  
+	  /*
 	  OrientGraphFactory factory = new OrientGraphFactory("remote:130.211.107.28:2424/testDB", "admin", "propulsionaanpakfraude").setupPool(1,10);
 
 	  // EVERY TIME YOU NEED A GRAPH INSTANCE
@@ -145,7 +145,7 @@ public class InMemoryH2Test {
 		} finally {
 			   graph.shutdown();
 		}
-  
+  */
 		  
 		  //Vertex v1 = graph.addVertex("class:Adres");
 		  //v1.setProperty("naam", "2222AA22");
